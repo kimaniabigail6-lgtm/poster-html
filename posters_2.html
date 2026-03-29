@@ -1,0 +1,686 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Poster Portfolio — Abigail Kimani</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;0,700;1,300;1,400;1,700&family=Jost:wght@100;200;300;400;500;600;700;800;900&family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #0A0A0A;
+  --fg: #F0EDE8;
+  --acc: #C1440E;
+}
+
+*, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+html { scroll-behavior: smooth; }
+
+body {
+  background: var(--bg);
+  color: var(--fg);
+  font-family: 'Jost', sans-serif;
+  font-weight: 300;
+  overflow-x: hidden;
+  cursor: none;
+}
+
+.cursor { width:8px; height:8px; background:var(--acc); border-radius:50%; position:fixed; pointer-events:none; z-index:9999; transform:translate(-50%,-50%); transition:transform 0.1s; }
+.cursor-ring { width:28px; height:28px; border:1px solid rgba(193,68,14,0.5); border-radius:50%; position:fixed; pointer-events:none; z-index:9998; transform:translate(-50%,-50%); transition:all 0.3s ease; }
+
+/* NAV */
+nav {
+  position: fixed; top:0; left:0; right:0; z-index:100;
+  padding: 20px 48px;
+  display: flex; justify-content:space-between; align-items:center;
+  background: linear-gradient(180deg, rgba(10,10,10,0.97) 0%, transparent 100%);
+}
+
+.nav-logo { font-family:'Cormorant Garamond',serif; font-size:20px; font-weight:300; color:var(--fg); text-decoration:none; letter-spacing:2px; }
+.nav-logo span { color:var(--acc); font-style:italic; }
+
+.nav-right { display:flex; gap:24px; align-items:center; }
+.nav-link { font-size:9px; letter-spacing:3px; text-transform:uppercase; color:rgba(240,237,232,0.4); text-decoration:none; font-weight:300; transition:color 0.3s; }
+.nav-link:hover { color:var(--acc); }
+.nav-back { font-size:9px; letter-spacing:3px; text-transform:uppercase; color:var(--acc); border:1px solid rgba(193,68,14,0.35); padding:8px 18px; text-decoration:none; transition:all 0.3s; font-weight:300; }
+.nav-back:hover { background:var(--acc); color:white; }
+
+/* HERO */
+.hero {
+  min-height: 100vh;
+  display: flex; flex-direction:column;
+  align-items:center; justify-content:center;
+  text-align:center;
+  padding: 120px 48px 80px;
+  position:relative; overflow:hidden;
+  background: radial-gradient(ellipse at 50% 60%, rgba(193,68,14,0.07) 0%, transparent 65%), #0A0A0A;
+}
+
+.hero::before {
+  content:'';
+  position:absolute; inset:0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+  pointer-events:none; opacity:0.6;
+}
+
+.hero-eyebrow { font-size:9px; letter-spacing:6px; text-transform:uppercase; color:var(--acc); font-weight:300; margin-bottom:20px; }
+
+.hero-title { font-family:'Cormorant Garamond',serif; font-size:clamp(56px,8vw,110px); font-weight:300; line-height:0.95; letter-spacing:-2px; margin-bottom:24px; }
+.hero-title em { color:var(--acc); font-style:italic; }
+
+.hero-sub { font-size:11px; letter-spacing:4px; text-transform:uppercase; color:rgba(240,237,232,0.3); font-weight:200; margin-bottom:48px; line-height:2; }
+
+.hero-tags { display:flex; gap:10px; justify-content:center; flex-wrap:wrap; }
+.htag { font-size:8px; letter-spacing:2px; text-transform:uppercase; border:1px solid rgba(240,237,232,0.1); color:rgba(240,237,232,0.35); padding:6px 14px; font-weight:300; }
+
+/* SECTION */
+.section { padding:80px 48px; }
+.section-label { font-size:8px; letter-spacing:6px; text-transform:uppercase; color:var(--acc); font-weight:300; margin-bottom:12px; display:flex; align-items:center; gap:14px; }
+.section-label::before { content:''; width:24px; height:1px; background:var(--acc); }
+.section-title { font-family:'Cormorant Garamond',serif; font-size:clamp(32px,4vw,52px); font-weight:300; color:var(--fg); line-height:1.1; margin-bottom:56px; }
+.section-title em { color:var(--acc); font-style:italic; }
+
+/* POSTER GRID */
+.poster-grid { display:grid; grid-template-columns:1fr 1fr 1fr; gap:4px; }
+.poster-grid-2 { display:grid; grid-template-columns:1.4fr 1fr; gap:4px; margin-top:4px; }
+.poster-grid-3 { display:grid; grid-template-columns:1fr 1fr; gap:4px; margin-top:4px; }
+
+/* POSTER BASE */
+.poster {
+  position:relative; overflow:hidden;
+  cursor:none;
+  transition: transform 0.5s cubic-bezier(0.23,1,0.32,1);
+}
+
+.poster:hover { transform: scale(1.01); z-index:2; }
+
+.poster-inner { width:100%; height:100%; position:relative; }
+
+.poster-overlay {
+  position:absolute; inset:0;
+  background:linear-gradient(180deg, transparent 50%, rgba(0,0,0,0.7) 100%);
+  opacity:0; transition:opacity 0.4s ease;
+  display:flex; align-items:flex-end; padding:24px;
+  z-index:10;
+}
+
+.poster:hover .poster-overlay { opacity:1; }
+
+.po-info { display:flex; flex-direction:column; gap:4px; }
+.po-name { font-family:'Cormorant Garamond',serif; font-size:18px; font-weight:300; color:white; }
+.po-type { font-size:8px; letter-spacing:3px; text-transform:uppercase; color:var(--acc); font-weight:300; }
+
+
+/* ══════════════════════════════
+   POSTER 1 — EVENT POSTER
+   Afrobeats Night — Bold vibrant
+══════════════════════════════ */
+.p1 { background:#0D0208; min-height:500px; padding:40px 36px; display:flex; flex-direction:column; justify-content:space-between; position:relative; overflow:hidden; }
+
+.p1::before {
+  content:'';
+  position:absolute; inset:0;
+  background: conic-gradient(from 180deg at 50% 120%, #FF2D55 0deg, #FF6B35 60deg, #FFD60A 120deg, #FF2D55 180deg, #7B2D8B 240deg, #FF2D55 360deg);
+  opacity:0.12;
+}
+
+.p1-noise {
+  position:absolute; inset:0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 300 300' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.06'/%3E%3C/svg%3E");
+  pointer-events:none;
+}
+
+.p1-top { position:relative; z-index:1; }
+.p1-presents { font-size:8px; letter-spacing:5px; text-transform:uppercase; color:rgba(255,255,255,0.35); font-weight:200; }
+.p1-title-wrap { margin:20px 0; }
+.p1-title { font-family:'Jost',sans-serif; font-size:clamp(42px,5vw,72px); font-weight:900; line-height:0.88; text-transform:uppercase; letter-spacing:-2px; }
+.p1-t1 { color:#FF2D55; display:block; }
+.p1-t2 { color:#FFD60A; display:block; -webkit-text-stroke:1px #FFD60A; color:transparent; }
+.p1-t3 { color:white; display:block; }
+
+.p1-mid { position:relative; z-index:1; }
+.p1-artists { display:flex; flex-direction:column; gap:3px; margin:24px 0; }
+.p1-artist { font-family:'Jost',sans-serif; font-size:11px; font-weight:300; letter-spacing:3px; text-transform:uppercase; color:rgba(255,255,255,0.6); border-top:1px solid rgba(255,255,255,0.08); padding-top:6px; }
+.p1-artist:first-child { font-size:15px; color:white; font-weight:400; }
+
+.p1-bottom { position:relative; z-index:1; display:flex; justify-content:space-between; align-items:flex-end; }
+.p1-date-wrap { }
+.p1-date { font-family:'Jost',sans-serif; font-size:32px; font-weight:700; color:#FFD60A; line-height:1; }
+.p1-venue { font-size:8px; letter-spacing:3px; text-transform:uppercase; color:rgba(255,255,255,0.4); font-weight:200; margin-top:4px; }
+.p1-ticket { background:#FF2D55; color:white; font-size:8px; letter-spacing:3px; text-transform:uppercase; padding:10px 18px; font-weight:500; border:none; }
+
+/* Decorative circles */
+.p1-circle-1 { position:absolute; width:200px; height:200px; border-radius:50%; border:1px solid rgba(255,45,85,0.15); top:-60px; right:-60px; }
+.p1-circle-2 { position:absolute; width:120px; height:120px; border-radius:50%; border:1px solid rgba(255,214,10,0.1); top:-20px; right:-20px; }
+
+
+/* ══════════════════════════════
+   POSTER 2 — TYPOGRAPHY POSTER
+   Nairobi — Editorial
+══════════════════════════════ */
+.p2 { background:#F0EDE8; min-height:500px; padding:36px 32px; display:flex; flex-direction:column; justify-content:space-between; position:relative; overflow:hidden; }
+
+.p2-bg-text { position:absolute; font-family:'Cormorant Garamond',serif; font-size:200px; font-weight:700; color:rgba(44,26,14,0.04); line-height:1; top:50%; left:50%; transform:translate(-50%,-50%); white-space:nowrap; pointer-events:none; letter-spacing:-5px; }
+
+.p2-top { display:flex; justify-content:space-between; align-items:flex-start; position:relative; z-index:1; }
+.p2-issue { font-size:8px; letter-spacing:4px; text-transform:uppercase; color:rgba(44,26,14,0.35); font-weight:300; }
+.p2-year { font-size:8px; letter-spacing:2px; color:rgba(44,26,14,0.35); font-weight:300; }
+
+.p2-mid { position:relative; z-index:1; flex:1; display:flex; align-items:center; }
+.p2-title { font-family:'Cormorant Garamond',serif; font-size:clamp(52px,7vw,96px); font-weight:300; line-height:0.88; color:#2C1A0E; letter-spacing:-2px; }
+.p2-title em { color:#C1440E; font-style:italic; display:block; }
+
+.p2-rule { height:1px; background:#2C1A0E; opacity:0.15; margin:20px 0; position:relative; z-index:1; }
+
+.p2-bottom { display:flex; justify-content:space-between; align-items:flex-end; position:relative; z-index:1; }
+.p2-desc { font-size:10px; color:rgba(44,26,14,0.5); line-height:1.7; font-weight:300; max-width:180px; letter-spacing:0.3px; }
+.p2-tag { writing-mode:vertical-rl; font-size:8px; letter-spacing:4px; text-transform:uppercase; color:#C1440E; font-weight:300; }
+
+/* Decorative accent */
+.p2-accent { position:absolute; bottom:0; right:0; width:80px; height:80px; background:#C1440E; }
+
+
+/* ══════════════════════════════
+   POSTER 3 — PRODUCT POSTER
+   Skincare — Clean minimal
+══════════════════════════════ */
+.p3 { background:#1C1C1C; min-height:500px; padding:36px 32px; display:flex; flex-direction:column; justify-content:space-between; position:relative; overflow:hidden; }
+
+.p3-glow { position:absolute; width:300px; height:300px; border-radius:50%; background:radial-gradient(ellipse, rgba(212,137,42,0.12) 0%, transparent 70%); top:50%; left:50%; transform:translate(-50%,-50%); pointer-events:none; }
+
+.p3-top { display:flex; justify-content:space-between; align-items:flex-start; position:relative; z-index:1; }
+.p3-brand { font-family:'Cormorant Garamond',serif; font-size:14px; font-weight:300; color:rgba(240,237,232,0.5); letter-spacing:4px; text-transform:uppercase; }
+.p3-vol { font-size:8px; letter-spacing:2px; color:rgba(240,237,232,0.2); font-weight:200; }
+
+/* Product illustration — CSS-only bottle */
+.p3-product { position:relative; z-index:1; display:flex; justify-content:center; align-items:center; flex:1; padding:20px 0; }
+
+.bottle-wrap { position:relative; display:flex; flex-direction:column; align-items:center; filter:drop-shadow(0 20px 40px rgba(0,0,0,0.5)); }
+
+.bottle-cap { width:28px; height:16px; background:linear-gradient(160deg, #D4892A 0%, #A0660A 100%); border-radius:3px 3px 0 0; }
+.bottle-neck { width:22px; height:24px; background:linear-gradient(160deg, #E8D5B0 0%, #C8A96E 100%); }
+.bottle-shoulder { width:0; height:0; border-left:18px solid transparent; border-right:18px solid transparent; border-bottom:16px solid #C8A96E; }
+.bottle-body {
+  width:80px; height:130px;
+  background:linear-gradient(160deg, #E8D5B0 0%, #D4B87A 40%, #C8A96E 100%);
+  border-radius:4px 4px 10px 10px;
+  display:flex; flex-direction:column; align-items:center; justify-content:center; gap:4px;
+  position:relative; overflow:hidden;
+}
+.bottle-body::after { content:''; position:absolute; left:0; top:0; bottom:0; width:8px; background:linear-gradient(90deg, rgba(255,255,255,0.2), transparent); }
+.bottle-label-band { width:70px; padding:6px 0; background:rgba(44,26,14,0.12); display:flex; flex-direction:column; align-items:center; gap:2px; }
+.blb-name { font-family:'Cormorant Garamond',serif; font-size:11px; font-weight:400; color:#2C1A0E; letter-spacing:2px; }
+.blb-sub { font-size:6px; letter-spacing:2px; color:rgba(44,26,14,0.5); text-transform:uppercase; font-weight:300; }
+.bottle-base { width:72px; height:8px; background:linear-gradient(90deg, #A07838, #C8A96E, #A07838); border-radius:0 0 6px 6px; }
+
+.p3-bottom { position:relative; z-index:1; }
+.p3-name { font-family:'Cormorant Garamond',serif; font-size:clamp(28px,3vw,42px); font-weight:300; color:var(--fg); line-height:1; margin-bottom:6px; }
+.p3-name em { color:#D4892A; font-style:italic; }
+.p3-desc { font-size:9px; letter-spacing:2px; color:rgba(240,237,232,0.3); text-transform:uppercase; font-weight:200; line-height:1.8; }
+
+
+/* ══════════════════════════════
+   POSTER 4 — TECH STARTUP FLYER
+   App Launch — Modern
+══════════════════════════════ */
+.p4 { background:#050510; min-height:420px; padding:36px 32px; display:flex; flex-direction:column; justify-content:space-between; position:relative; overflow:hidden; }
+
+/* Grid lines */
+.p4::before {
+  content:'';
+  position:absolute; inset:0;
+  background-image:
+    linear-gradient(rgba(99,102,241,0.06) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(99,102,241,0.06) 1px, transparent 1px);
+  background-size: 32px 32px;
+  pointer-events:none;
+}
+
+.p4-glow1 { position:absolute; width:250px; height:250px; border-radius:50%; background:radial-gradient(ellipse, rgba(99,102,241,0.18) 0%, transparent 70%); top:-80px; right:-60px; pointer-events:none; }
+.p4-glow2 { position:absolute; width:180px; height:180px; border-radius:50%; background:radial-gradient(ellipse, rgba(16,185,129,0.12) 0%, transparent 70%); bottom:-40px; left:-40px; pointer-events:none; }
+
+.p4-top { display:flex; justify-content:space-between; align-items:center; position:relative; z-index:1; }
+.p4-logo { font-family:'Space Grotesk',sans-serif; font-size:14px; font-weight:600; color:white; letter-spacing:1px; }
+.p4-logo span { color:#6366F1; }
+.p4-badge { font-size:7px; letter-spacing:3px; text-transform:uppercase; color:#10B981; border:1px solid rgba(16,185,129,0.3); padding:4px 10px; font-weight:400; background:rgba(16,185,129,0.08); }
+
+.p4-mid { position:relative; z-index:1; flex:1; display:flex; flex-direction:column; justify-content:center; gap:12px; }
+
+.p4-tag { font-size:8px; letter-spacing:4px; text-transform:uppercase; color:#6366F1; font-weight:300; }
+
+.p4-title { font-family:'Space Grotesk',sans-serif; font-size:clamp(28px,3.5vw,48px); font-weight:700; line-height:1.05; color:white; }
+.p4-title span { color:#6366F1; }
+
+.p4-desc { font-size:10px; color:rgba(255,255,255,0.35); line-height:1.7; font-weight:300; letter-spacing:0.3px; max-width:280px; }
+
+.p4-stats { display:flex; gap:20px; margin-top:8px; }
+.p4-stat { display:flex; flex-direction:column; gap:2px; }
+.p4-stat-num { font-family:'Space Grotesk',sans-serif; font-size:22px; font-weight:700; color:white; line-height:1; }
+.p4-stat-num span { color:#6366F1; }
+.p4-stat-label { font-size:7px; letter-spacing:2px; text-transform:uppercase; color:rgba(255,255,255,0.25); font-weight:300; }
+
+.p4-bottom { display:flex; justify-content:space-between; align-items:center; position:relative; z-index:1; }
+.p4-date { font-size:9px; letter-spacing:3px; text-transform:uppercase; color:rgba(255,255,255,0.25); font-weight:200; }
+.p4-cta { background:#6366F1; color:white; font-size:8px; letter-spacing:3px; text-transform:uppercase; padding:10px 20px; font-weight:500; border:none; font-family:'Space Grotesk',sans-serif; }
+
+
+/* ══════════════════════════════
+   POSTER 5 — SOCIAL MEDIA
+   Fashion Drop — Dark luxury
+══════════════════════════════ */
+.p5 { background:#0C0C0C; min-height:420px; padding:36px 32px; display:flex; flex-direction:column; justify-content:space-between; position:relative; overflow:hidden; }
+
+.p5-stripe { position:absolute; top:0; left:0; bottom:0; width:4px; background:linear-gradient(180deg, #C1440E 0%, #D4892A 50%, #C1440E 100%); }
+
+.p5-pattern { position:absolute; inset:0; background-image:repeating-linear-gradient(45deg, rgba(255,255,255,0.015) 0px, rgba(255,255,255,0.015) 1px, transparent 1px, transparent 16px), repeating-linear-gradient(-45deg, rgba(255,255,255,0.01) 0px, rgba(255,255,255,0.01) 1px, transparent 1px, transparent 16px); pointer-events:none; }
+
+.p5-top { display:flex; justify-content:space-between; align-items:flex-start; position:relative; z-index:1; padding-left:16px; }
+.p5-brand { font-family:'Cormorant Garamond',serif; font-size:11px; font-weight:300; color:rgba(240,237,232,0.4); letter-spacing:6px; text-transform:uppercase; }
+.p5-season { font-size:8px; letter-spacing:3px; text-transform:uppercase; color:var(--acc); font-weight:300; }
+
+.p5-mid { position:relative; z-index:1; flex:1; display:flex; flex-direction:column; justify-content:center; padding-left:16px; gap:8px; }
+
+.p5-new { font-size:8px; letter-spacing:5px; text-transform:uppercase; color:rgba(240,237,232,0.25); font-weight:200; }
+
+.p5-title { font-family:'Cormorant Garamond',serif; font-size:clamp(40px,5vw,68px); font-weight:300; line-height:0.9; color:var(--fg); letter-spacing:-1px; }
+.p5-title em { color:var(--acc); font-style:italic; display:block; }
+
+.p5-divider { width:40px; height:1px; background:var(--acc); opacity:0.5; }
+
+.p5-copy { font-size:10px; color:rgba(240,237,232,0.35); line-height:1.7; font-weight:300; letter-spacing:0.5px; }
+
+.p5-bottom { display:flex; justify-content:space-between; align-items:center; position:relative; z-index:1; padding-left:16px; }
+.p5-price { display:flex; flex-direction:column; gap:2px; }
+.p5-price-label { font-size:7px; letter-spacing:3px; text-transform:uppercase; color:rgba(240,237,232,0.2); font-weight:200; }
+.p5-price-num { font-family:'Cormorant Garamond',serif; font-size:28px; font-weight:300; color:var(--fg); }
+.p5-btn { font-size:8px; letter-spacing:3px; text-transform:uppercase; color:var(--fg); border:1px solid rgba(240,237,232,0.2); padding:10px 18px; font-weight:300; transition:all 0.3s; }
+.p5-btn:hover { background:var(--acc); border-color:var(--acc); }
+
+
+/* ══════════════════════════════
+   POSTER 6 — FOOD SOCIAL GRAPHIC
+   Restaurant — Warm & rich
+══════════════════════════════ */
+.p6 { min-height:460px; padding:0; position:relative; overflow:hidden; }
+
+.p6-bg { position:absolute; inset:0; background:linear-gradient(135deg, #1A0A02 0%, #2C1A0E 60%, #1A0A02 100%); }
+
+.p6-pattern-overlay { position:absolute; inset:0; background-image:repeating-linear-gradient(30deg, rgba(193,68,14,0.04) 0px, rgba(193,68,14,0.04) 1px, transparent 1px, transparent 20px), repeating-linear-gradient(150deg, rgba(193,68,14,0.03) 0px, rgba(193,68,14,0.03) 1px, transparent 1px, transparent 20px); pointer-events:none; }
+
+.p6-content { position:relative; z-index:1; padding:36px 32px; height:100%; display:flex; flex-direction:column; justify-content:space-between; min-height:460px; }
+
+.p6-top { display:flex; justify-content:space-between; align-items:flex-start; }
+.p6-logo-text { font-family:'Cormorant Garamond',serif; font-size:13px; font-weight:300; color:rgba(245,237,214,0.4); letter-spacing:4px; text-transform:uppercase; }
+.p6-dot { width:8px; height:8px; background:var(--acc); border-radius:50%; margin-top:6px; }
+
+.p6-mid { flex:1; display:flex; flex-direction:column; justify-content:center; gap:10px; }
+
+.p6-eyebrow { font-size:8px; letter-spacing:5px; text-transform:uppercase; color:var(--acc); font-weight:300; }
+
+.p6-title { font-family:'Cormorant Garamond',serif; font-size:clamp(36px,4.5vw,60px); font-weight:300; color:#F5EDD6; line-height:1; }
+.p6-title em { color:var(--acc); font-style:italic; display:block; }
+
+.p6-rule { width:50px; height:1px; background:var(--acc); opacity:0.4; }
+
+.p6-desc { font-size:10px; color:rgba(245,237,214,0.35); line-height:1.8; font-weight:300; letter-spacing:0.3px; }
+
+.p6-bottom { display:flex; align-items:center; justify-content:space-between; }
+.p6-details { display:flex; flex-direction:column; gap:4px; }
+.p6-detail { font-size:8px; letter-spacing:2px; color:rgba(245,237,214,0.3); text-transform:uppercase; font-weight:200; }
+.p6-detail span { color:var(--acc); }
+.p6-reserve { font-size:8px; letter-spacing:3px; text-transform:uppercase; color:#F5EDD6; border:1px solid rgba(245,237,214,0.2); padding:10px 18px; font-weight:300; }
+
+
+/* POSTER INFO STRIP */
+.poster-info-strip {
+  display:grid; grid-template-columns:repeat(5,1fr);
+  border-top:1px solid rgba(240,237,232,0.05);
+  margin-top:32px;
+}
+
+.pis-item { padding:24px 20px; border-right:1px solid rgba(240,237,232,0.05); }
+.pis-item:last-child { border-right:none; }
+.pis-num { font-size:8px; letter-spacing:3px; color:var(--acc); font-weight:300; margin-bottom:8px; }
+.pis-name { font-family:'Cormorant Garamond',serif; font-size:17px; font-weight:300; color:var(--fg); margin-bottom:4px; }
+.pis-type { font-size:8px; letter-spacing:2px; color:rgba(240,237,232,0.25); text-transform:uppercase; font-weight:200; }
+
+
+/* FOOTER */
+footer {
+  padding:28px 48px;
+  display:flex; justify-content:space-between; align-items:center;
+  border-top:1px solid rgba(240,237,232,0.05);
+  background:#060606;
+}
+
+.footer-left { font-family:'Cormorant Garamond',serif; font-size:14px; font-style:italic; color:rgba(240,237,232,0.2); }
+.footer-left span { color:var(--acc); }
+.footer-right { font-size:8px; letter-spacing:3px; text-transform:uppercase; color:rgba(240,237,232,0.12); font-weight:200; }
+
+/* ANIMATIONS */
+@keyframes fadeUp { from{opacity:0;transform:translateY(24px)} to{opacity:1;transform:translateY(0)} }
+.hero-eyebrow { animation:fadeUp 0.8s ease 0.1s both; }
+.hero-title { animation:fadeUp 0.8s ease 0.25s both; }
+.hero-sub { animation:fadeUp 0.8s ease 0.4s both; }
+.hero-tags { animation:fadeUp 0.8s ease 0.55s both; }
+</style>
+</head>
+<body>
+
+<div class="cursor" id="cur"></div>
+<div class="cursor-ring" id="ring"></div>
+
+<!-- NAV -->
+<nav>
+  <a href="#" class="nav-logo">A<span>K</span></a>
+  <div class="nav-right">
+    <a href="#posters" class="nav-link">Posters</a>
+    <a href="https://kimaniabigail6-lgtm.github.io" class="nav-back">← Case Study</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-eyebrow">Poster & Print Design · Abigail Kimani</div>
+  <h1 class="hero-title">Design that<br><em>stops</em> people.</h1>
+  <p class="hero-sub">Event Posters · Typography · Product · Social Media · Flyers</p>
+  <div class="hero-tags">
+    <span class="htag">Music & Events</span>
+    <span class="htag">Fashion & Lifestyle</span>
+    <span class="htag">Food & Beverage</span>
+    <span class="htag">Tech & Startup</span>
+    <span class="htag">Typography</span>
+  </div>
+</div>
+
+<!-- POSTERS -->
+<section class="section" id="posters">
+  <div class="section-label">Portfolio Work</div>
+  <h2 class="section-title">Five pieces. Five <em>styles.</em></h2>
+
+  <!-- ROW 1: 3 posters -->
+  <div class="poster-grid">
+
+    <!-- POSTER 1: Afrobeats Event -->
+    <div class="poster">
+      <div class="poster-inner p1">
+        <div class="p1-circle-1"></div>
+        <div class="p1-circle-2"></div>
+        <div class="p1-noise"></div>
+
+        <div class="p1-top">
+          <div class="p1-presents">Afro Nation Nairobi Presents</div>
+          <div class="p1-title-wrap">
+            <div class="p1-title">
+              <span class="p1-t1">AFRO</span>
+              <span class="p1-t2">PULSE</span>
+              <span class="p1-t3">NIGHT</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="p1-mid">
+          <div class="p1-artists">
+            <div class="p1-artist">Burna Boy · Tyla · Ayra Starr</div>
+            <div class="p1-artist">Bien · Nviiri the Storyteller</div>
+            <div class="p1-artist">DJ Shiti · Nandy · Sauti Sol</div>
+          </div>
+        </div>
+
+        <div class="p1-bottom">
+          <div class="p1-date-wrap">
+            <div class="p1-date">14 June</div>
+            <div class="p1-venue">Uhuru Gardens · Nairobi · Gates 7PM</div>
+          </div>
+          <div class="p1-ticket">Get Tickets</div>
+        </div>
+      </div>
+      <div class="poster-overlay">
+        <div class="po-info">
+          <div class="po-name">Afro Pulse Night</div>
+          <div class="po-type">Event Poster · Music & Entertainment</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- POSTER 2: Typography -->
+    <div class="poster">
+      <div class="poster-inner p2">
+        <div class="p2-bg-text">Nairobi</div>
+        <div class="p2-top">
+          <div class="p2-issue">No. 001 / Typography</div>
+          <div class="p2-year">2025</div>
+        </div>
+        <div class="p2-mid">
+          <div class="p2-title">
+            Nairobi<br>
+            <em>is not</em>
+            waiting
+          </div>
+        </div>
+        <div class="p2-rule"></div>
+        <div class="p2-bottom">
+          <div class="p2-desc">The city moves before you decide to move with it. Design for the pace of now.</div>
+          <div class="p2-tag">Culture</div>
+        </div>
+        <div class="p2-accent"></div>
+      </div>
+      <div class="poster-overlay">
+        <div class="po-info">
+          <div class="po-name">Nairobi Is Not Waiting</div>
+          <div class="po-type">Typography Poster · Culture & Arts</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- POSTER 3: Product -->
+    <div class="poster">
+      <div class="poster-inner p3">
+        <div class="p3-glow"></div>
+        <div class="p3-top">
+          <div class="p3-brand">Zawadi</div>
+          <div class="p3-vol">50ml</div>
+        </div>
+
+        <div class="p3-product">
+          <div class="bottle-wrap">
+            <div class="bottle-cap"></div>
+            <div class="bottle-neck"></div>
+            <div class="bottle-shoulder"></div>
+            <div class="bottle-body">
+              <div class="bottle-label-band">
+                <div class="blb-name">ZAWADI</div>
+                <div class="blb-sub">Face Oil</div>
+              </div>
+            </div>
+            <div class="bottle-base"></div>
+          </div>
+        </div>
+
+        <div class="p3-bottom">
+          <div class="p3-name">Liquid <em>Gold</em><br>Face Oil</div>
+          <div class="p3-desc">Cold-pressed baobab & marula.<br>Harvested in East Africa.<br>Bottled with intention.</div>
+        </div>
+      </div>
+      <div class="poster-overlay">
+        <div class="po-info">
+          <div class="po-name">Zawadi — Liquid Gold</div>
+          <div class="po-type">Product Poster · Beauty & Lifestyle</div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ROW 2: 2 posters -->
+  <div class="poster-grid-2">
+
+    <!-- POSTER 4: Tech Flyer -->
+    <div class="poster">
+      <div class="poster-inner p4">
+        <div class="p4-glow1"></div>
+        <div class="p4-glow2"></div>
+
+        <div class="p4-top">
+          <div class="p4-logo">pesa<span>flow</span></div>
+          <div class="p4-badge">Now Live</div>
+        </div>
+
+        <div class="p4-mid">
+          <div class="p4-tag">Fintech · Nairobi</div>
+          <div class="p4-title">Send money<br>like it's <span>2025.</span></div>
+          <div class="p4-desc">PesaFlow makes cross-border payments instant, cheap and built for East Africa. No bank account needed.</div>
+          <div class="p4-stats">
+            <div class="p4-stat">
+              <div class="p4-stat-num">2s<span>.</span></div>
+              <div class="p4-stat-label">Transfer time</div>
+            </div>
+            <div class="p4-stat">
+              <div class="p4-stat-num">0<span>%</span></div>
+              <div class="p4-stat-label">Hidden fees</div>
+            </div>
+            <div class="p4-stat">
+              <div class="p4-stat-num">5<span>+</span></div>
+              <div class="p4-stat-label">Countries</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="p4-bottom">
+          <div class="p4-date">Launch Event · 20 March 2025</div>
+          <div class="p4-cta">Download App</div>
+        </div>
+      </div>
+      <div class="poster-overlay">
+        <div class="po-info">
+          <div class="po-name">PesaFlow — App Launch</div>
+          <div class="po-type">Tech Flyer · Fintech & Startup</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- POSTER 5: Fashion Social -->
+    <div class="poster">
+      <div class="poster-inner p5">
+        <div class="p5-stripe"></div>
+        <div class="p5-pattern"></div>
+
+        <div class="p5-top">
+          <div class="p5-brand">Akili Studio</div>
+          <div class="p5-season">SS '25</div>
+        </div>
+
+        <div class="p5-mid">
+          <div class="p5-new">New Collection</div>
+          <div class="p5-title">
+            Dressed<br>
+            <em>in roots.</em>
+          </div>
+          <div class="p5-divider"></div>
+          <div class="p5-copy">Nairobi-made luxury. Each piece tells the story of where you come from and where you're going.</div>
+        </div>
+
+        <div class="p5-bottom">
+          <div class="p5-price">
+            <div class="p5-price-label">Starting from</div>
+            <div class="p5-price-num">KES 8,500</div>
+          </div>
+          <div class="p5-btn">Shop Now</div>
+        </div>
+      </div>
+      <div class="poster-overlay">
+        <div class="po-info">
+          <div class="po-name">Akili Studio — SS '25</div>
+          <div class="po-type">Social Media Graphic · Fashion & Lifestyle</div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ROW 3: Food poster full width -->
+  <div style="margin-top:4px;">
+    <div class="poster">
+      <div class="poster-inner p6">
+        <div class="p6-bg"></div>
+        <div class="p6-pattern-overlay"></div>
+        <div class="p6-content">
+          <div class="p6-top">
+            <div class="p6-logo-text">Nyota Restaurant</div>
+            <div class="p6-dot"></div>
+          </div>
+
+          <div class="p6-mid">
+            <div class="p6-eyebrow">Chef's Table · Limited Seats</div>
+            <div class="p6-title">
+              Where Kenyan<br>
+              <em>flavour</em> leads.
+            </div>
+            <div class="p6-rule"></div>
+            <div class="p6-desc">A seven-course tasting menu celebrating the ingredients, techniques and stories of East African cuisine. Each dish is a conversation between tradition and now.</div>
+          </div>
+
+          <div class="p6-bottom">
+            <div class="p6-details">
+              <div class="p6-detail">📍 <span>Westlands, Nairobi</span></div>
+              <div class="p6-detail">🗓 <span>Every Friday & Saturday</span></div>
+              <div class="p6-detail">🕖 <span>7PM — 11PM · 7 Courses</span></div>
+            </div>
+            <div class="p6-reserve">Reserve a Table</div>
+          </div>
+        </div>
+      </div>
+      <div class="poster-overlay">
+        <div class="po-info">
+          <div class="po-name">Nyota Restaurant — Chef's Table</div>
+          <div class="po-type">Event Flyer · Food & Beverage</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- INFO STRIP -->
+  <div class="poster-info-strip">
+    <div class="pis-item">
+      <div class="pis-num">01</div>
+      <div class="pis-name">Afro Pulse Night</div>
+      <div class="pis-type">Event Poster</div>
+    </div>
+    <div class="pis-item">
+      <div class="pis-num">02</div>
+      <div class="pis-name">Nairobi Is Not Waiting</div>
+      <div class="pis-type">Typography</div>
+    </div>
+    <div class="pis-item">
+      <div class="pis-num">03</div>
+      <div class="pis-name">Zawadi Face Oil</div>
+      <div class="pis-type">Product Poster</div>
+    </div>
+    <div class="pis-item">
+      <div class="pis-num">04</div>
+      <div class="pis-name">PesaFlow Launch</div>
+      <div class="pis-type">Tech Flyer</div>
+    </div>
+    <div class="pis-item">
+      <div class="pis-num">05</div>
+      <div class="pis-name">Akili Studio SS '25</div>
+      <div class="pis-type">Social Graphic</div>
+    </div>
+  </div>
+
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-left">Poster Design — <span>Abigail Kimani</span> · Nairobi 2025</div>
+  <div class="footer-right">kimaniabigail6@gmail.com</div>
+</footer>
+
+<script>
+const cur = document.getElementById('cur');
+const ring = document.getElementById('ring');
+let mx=0,my=0,rx=0,ry=0;
+document.addEventListener('mousemove',e=>{ mx=e.clientX; my=e.clientY; cur.style.left=mx+'px'; cur.style.top=my+'px'; });
+(function loop(){ rx+=(mx-rx)*0.1; ry+=(my-ry)*0.1; ring.style.left=rx+'px'; ring.style.top=ry+'px'; requestAnimationFrame(loop); })();
+</script>
+</body>
+</html>
